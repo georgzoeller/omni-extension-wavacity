@@ -1216,16 +1216,31 @@ if (typeof navigator !== 'undefined') {
   };
 
   var downloadFile = function (filename, size, data) {
-    var link = document.createElement('a');
-
     var sharedArray = new Uint8Array(Module.HEAPU8.buffer, data, size);
     // Blob fails when passed SharedArrayBuffer
     var array = new Uint8Array(sharedArray);
     var blob = new Blob([array], {type: 'application/octet-stream'});
 
+
+		const form = new FormData();
+    form.append('file', blob, filename);
+
+    const response = fetch('/fid', {
+      method: 'POST',
+      body: form,
+    }).catch(ex => {
+      console.error(ex);
+    }).then(res => {
+      alert("Saved to file manager")
+      console.log(res);
+    })
+
+    /*
+    var link = document.createElement('a');
+
     link.href = URL.createObjectURL(blob);
     link.download = filename;
-    link.click();
+    link.click();*/
   };
 
   var endModal = null;
@@ -3238,7 +3253,8 @@ var ASM_CONSTS = {
   4481128: () => { return defaultSampleRate; },
  4481158: ($0) => { openAudio($0 > 0); },
  4481181: () => { closeAudio(); },
- 4481199: ($0, $1, $2) => { downloadFile(UTF8ToString($0), $1, $2); },
+ 4481199: ($0, $1, $2) => {
+    downloadFile(UTF8ToString($0), $1, $2); },
  4481243: () => { return isMobile(); },
  4481264: ($0) => { showFileDialog($0); },
  4481288: () => { return mainWindow.offsetTop; },
