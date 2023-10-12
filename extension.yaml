@@ -5,3 +5,13 @@ author: Georg Zoeller
 origin: https://github.com/georgzoeller/omni-extension-wavacity.git
 client:
   addToWorkbench: true
+  fileIntents:
+    edit:
+      'audio/*':
+        page: index
+        opts: {}
+
+      'application/ogg':
+        page: index
+        opts: {}
+
